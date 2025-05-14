@@ -16,28 +16,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/upload', async (req, res) => {
   try {
-    const { imageBase64, userId, chatId } = req.body;
-
-    if (!imageBase64 || !userId || !chatId) {
-      return res.status(400).json({ error: 'Некорректные данные запроса' });
+    const { image, userId, chatId } = req.body;
+    if (!image || !chatId) {
+      return res.status(400).json({ message: 'Invalid image data' });
     }
 
-    const buffer = Buffer.from(imageBase64, 'base64');
-
+    const buffer = Buffer.from(image, 'base64');
     await bot.sendPhoto(chatId, buffer, {
-      caption: '✅ Ваш мем готов!'
+      caption: 'Ваш мем готов!',
+      parse_mode: 'Markdown'
     });
 
-    console.log(`📸 Мем отправлен пользователю ${userId}`);
-
-    res.status(200).json({ success: true });
-  } catch (err) {
-    console.error('❌ Ошибка обработки /api/upload:', err);
-    res.status(500).json({ error: 'Ошибка сервера при обработке мема' });
-
+    await bot.sendMessage(chatId, '✅ Мем успешно создан!');
+    res.json({ status: 'ok' });
+  } catch (error) {
+    console.error('Ошибка загрузки:', error);
     if (ADMIN_CHAT_ID) {
-      await bot.sendMessage(ADMIN_CHAT_ID, `❗ Ошибка /api/upload для ${req.body?.userId}:\n${err.stack || err.message}`);
+      await bot.sendMessage(ADMIN_CHAT_ID, `❌ Ошибка при загрузке изображения:\n${error.stack}`);
     }
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

@@ -321,6 +321,9 @@
           sendMemeBtn.disabled = true;
 
           const blob = await ultraCompress(canvas);
+          console.log(`Compressed blob size: ${blob.size}`);
+
+          if (blob.size > 3000) throw new Error(`Слишком много текста. Упростите мем. ${blob.size} байт`);
 
           const base64 = await new Promise(resolve => {
             const reader = new FileReader();
@@ -329,37 +332,32 @@
           });
 
           const userId = Telegram.WebApp.initDataUnsafe.user?.id;
-          const chatId = Telegram.WebApp.initDataUnsafe.user?.id; // Telegram user ID = chatId
+          const chatId = Telegram.WebApp.initDataUnsafe.user?.id;
+          if (!userId || !chatId) throw new Error("userId не определён");
 
-          if (!userId || !chatId) throw new Error("userId или chatId не определён");
-
-          const payload = {
-            action: 'upload_meme_base64',
-            userId,
-            chatId,
-            imageBase64: base64
-          };
-
-          const response = await fetch('https://<ТВОЙ_ДОМЕН>/api/upload', {
+          // ✅ Заменяем sendData на fetch
+          const res = await fetch('https://meme-bot-server.onrender.com/api/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+              image: base64,
+              userId,
+              chatId
+            })
           });
 
-          if (!response.ok) {
-            throw new Error('Ошибка отправки на сервер');
-          }
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.message || 'Ошибка загрузки');
 
           Telegram.WebApp.close();
         } catch (error) {
-          console.error('Error sending meme:', error);
+          console.error('Ошибка отправки:', error);
           Telegram.WebApp.showAlert(error.message);
         } finally {
           Telegram.WebApp.MainButton.hideProgress();
           sendMemeBtn.disabled = false;
         }
       });
-
       showPlaceholder();
     });
   </script>
