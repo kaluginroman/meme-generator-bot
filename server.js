@@ -40,7 +40,6 @@ app.post('/api/upload', async (req, res) => {
       filename: 'meme.webp'
     });
 
-    await bot.sendMessage(chatId, '✅ Мем успешно создан!');
     res.json({ status: 'ok' });
   } catch (error) {
     console.error('Ошибка загрузки:', error);

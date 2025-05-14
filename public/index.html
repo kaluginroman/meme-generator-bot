@@ -309,7 +309,7 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(currentTemplate, 0, 0, canvas.width, canvas.height);
 
-        const fontSize = Math.floor(canvas.width / 10); // увеличим шрифт
+        const fontSize = Math.floor(canvas.width / 12); // увеличим шрифт
         ctx.font = `bold ${fontSize}px Impact, Arial, sans-serif`;
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'black';
@@ -332,7 +332,7 @@
         if (topText) drawText(topText, 10);
         if (bottomText) drawText(bottomText, canvas.height - fontSize - 10);
 
-        sendMemeBtn.style.display = 'inline-block';
+        sendMemeBtn.style.display = 'flex';
       };
 
       async function ultraCompress(canvas) {
