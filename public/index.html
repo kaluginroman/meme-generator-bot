@@ -87,11 +87,13 @@
     }
 
     #sendMemeBtn {
+      position: relative;
+      display: inline-block;
+      padding: 12px 20px;
       background-color: #5c6bc0;
       color: white;
       font-weight: bold;
       border-radius: 10px;
-      padding: 12px 20px;
       cursor: pointer;
       max-width: 90%;
       transition: background 0.3s ease;
@@ -99,6 +101,33 @@
 
     #sendMemeBtn:hover {
       background-color: #3f51b5;
+    }
+
+    #sendMemeBtn:disabled {
+      background-color: #b0bec5;
+    }
+
+    #buttonText {
+      display: inline-block;
+    }
+
+    #loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     input[type="text"] {
@@ -214,7 +243,10 @@
     </div>
   </div>
 
-  <button id="sendMemeBtn" style="display: none;">Отправить мем в чат</button>
+  <button id="sendMemeBtn" style="display: none;">
+    <span id="buttonText">Отправить мем в чат</span>
+    <div id="loader" style="display: none;" class="loader"></div>
+  </button>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -321,6 +353,9 @@
 
       sendMemeBtn.addEventListener('click', async () => {
         try {
+          // Показываем лоадер и скрываем текст кнопки
+          document.getElementById('loader').style.display = 'block';
+          document.getElementById('buttonText').style.display = 'none';
           Telegram.WebApp.MainButton.showProgress(true);
           sendMemeBtn.disabled = true;
 
@@ -356,10 +391,14 @@
           console.error('Ошибка отправки:', error);
           Telegram.WebApp.showAlert(error.message);
         } finally {
+          // Скрываем лоадер и показываем текст кнопки
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('buttonText').style.display = 'inline';
           Telegram.WebApp.MainButton.hideProgress();
           sendMemeBtn.disabled = false;
         }
       });
+
       showPlaceholder();
     });
   </script>
