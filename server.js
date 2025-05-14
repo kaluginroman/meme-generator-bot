@@ -34,11 +34,7 @@ app.post('/api/upload', async (req, res) => {
     }
 
     const buffer = Buffer.from(image, 'base64');
-
-    await bot.sendPhoto(chatId, {
-      source: buffer,
-      filename: 'meme.webp'
-    }, {
+    await bot.sendPhoto(chatId, buffer, {
       caption: 'Ваш мем готов!',
       parse_mode: 'Markdown'
     });
