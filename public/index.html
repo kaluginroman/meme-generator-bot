@@ -274,27 +274,31 @@
           return;
         }
 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(currentTemplate, 0, 0, canvas.width, canvas.height);
 
-        const fontSize = Math.floor(canvas.width / 16);
+        const fontSize = Math.floor(canvas.width / 10); // увеличим шрифт
         ctx.font = `bold ${fontSize}px Impact, Arial, sans-serif`;
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = fontSize / 8;
+        ctx.lineWidth = Math.floor(fontSize / 5);
         ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
 
-        const topText = document.getElementById('topText').value;
-        const bottomText = document.getElementById('bottomText').value;
+        const topText = document.getElementById('topText').value.toUpperCase();
+        const bottomText = document.getElementById('bottomText').value.toUpperCase();
 
-        if (topText) {
-          ctx.fillText(topText, canvas.width / 2, fontSize + 10);
-          ctx.strokeText(topText, canvas.width / 2, fontSize + 10);
+        function drawText(text, y) {
+          const maxWidth = canvas.width - 20;
+          ctx.lineJoin = 'round';
+          ctx.miterLimit = 2;
+
+          ctx.strokeText(text, canvas.width / 2, y, maxWidth);
+          ctx.fillText(text, canvas.width / 2, y, maxWidth);
         }
 
-        if (bottomText) {
-          ctx.fillText(bottomText, canvas.width / 2, canvas.height - 10);
-          ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 10);
-        }
+        if (topText) drawText(topText, 10);
+        if (bottomText) drawText(bottomText, canvas.height - fontSize - 10);
 
         sendMemeBtn.style.display = 'inline-block';
       };
