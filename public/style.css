@@ -1,0 +1,242 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #e6e7ee, #f3f4f6);
+  color: #333;
+  text-align: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  width: 100%;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Количество колонок зависит от ширины экрана */
+  gap: 16px; /* Расстояние между карточками */
+  margin-bottom: 20px;
+}
+
+/* Каждая карточка */
+.template-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  height: fit-content;
+}
+
+.template-card:hover {
+  transform: scale(1.05); /* Немного увеличивается при наведении */
+}
+
+/* Изображение карточки */
+.template-card img {
+  width: 100%; /* Ширина картинки будет 100% от ширины карточки */
+  height: auto; /* Высота картинки пропорциональна ширине */
+  object-fit: cover; /* Обеспечивает обрезку картинки для лучшего вида */
+}
+
+/* Текст под картинкой */
+.template-card span {
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.inputs-wrap {
+  max-width: 400px;
+  width: 100%;
+}
+
+button {
+  padding: 12px 20px;
+  background: #5c6bc0;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  max-width: 90%;
+}
+
+button:hover {
+  background: #3f51b5;
+  transform: scale(1.05);
+}
+
+button:focus {
+  outline: none;
+}
+
+.pulse-button {
+  animation: pulse 2s infinite;
+}
+
+#sendMemeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px 20px;
+  background-color: #5c6bc0;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  max-width: 90%;
+  width: 210px;
+  height: 40px;
+  transition: background 0.3s ease;
+}
+
+#sendMemeBtn:hover {
+  background-color: #3f51b5;
+}
+
+#sendMemeBtn:disabled {
+  background-color: #b0bec5;
+}
+
+#buttonText {
+  display: inline-block;
+}
+
+#loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 90%;
+  max-width: 400px;
+  margin: 10px auto;
+  font-size: 16px;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  background-color: #ffffff;
+  display: block;
+}
+
+input[type="text"]:focus {
+  border-color: #5c6bc0;
+  outline: none;
+}
+
+.canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+#memeCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background: white;
+}
+
+.placeholder-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  z-index: 10;
+  color: #666;
+  padding: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.placeholder-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.placeholder-overlay .icon {
+  font-size: 48px;
+  color: #5c6bc0;
+  margin-bottom: 10px;
+}
+
+.placeholder-overlay .placeholder-text {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.placeholder-overlay .hint {
+  font-size: 14px;
+  color: #888;
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5em;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  input[type="text"] {
+    font-size: 14px;
+  }
+}
