@@ -1,8 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('memeCanvas');
+  const canvasContainer = document.getElementById('canvasContainer');
   const ctx = canvas.getContext('2d');
   const sendMemeBtn = document.getElementById('sendMemeBtn');
   const placeholder = document.getElementById('placeholder');
+  const templateGrid = document.getElementById('templateGrid');
+  const backButton = document.getElementById('backButton');
+  const inputsWrap = document.getElementById('inputsWrap');
+  const generateButton = document.getElementById('generateButton');
+  const header = document.getElementById('header');
   let currentTemplate = null;
 
   canvas.width = 500;
@@ -25,8 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
     placeholder.classList.add('hidden');
   }
 
-  window.loadTemplate = function(templateName) {
+  backButton.addEventListener('click', () => {
+    // Очистка текстов
+    document.getElementById('topText').value = '';
+    document.getElementById('bottomText').value = '';
+
+    // Сброс состояний
+    header.textContent = 'Выберите шаблон';
+    inputsWrap.style.display = 'none';
+    generateButton.style.display = 'none';
+    sendMemeBtn.style.display = 'none';
+    templateGrid.style.display = 'grid';
+    canvasContainer.style.display = 'none';
     showPlaceholder();
+  });
+
+  window.loadTemplate = function(templateName) {
+    // Скрыть шаблоны и показать экран с инпутами
+    templateGrid.style.display = 'none';
+    header.textContent = 'Добавь описание';
+    inputsWrap.style.display = 'flex';
+    generateButton.style.display = 'inline-block';
+    canvasContainer.style.display = 'block';
+
+    showPlaceholder();
+
+    // Загрузка выбранного шаблона
     currentTemplate = new Image();
     currentTemplate.crossOrigin = 'Anonymous';
     currentTemplate.src = `templates/${templateName}.jpg`;

@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Выберите шаблон</h1>
+  <h1 id="header">Выберите шаблон</h1>
 
-  <div class="template-grid">
+  <!-- Секция выбора шаблонов -->
+  <div class="template-grid" id="templateGrid">
     <div class="template-card" onclick="loadTemplate('Mocking Spongebob')">
       <img src="templates/Mocking Spongebob.jpg" alt="Mocking Spongebob">
       <span>Mocking Spongebob</span>
@@ -35,14 +36,17 @@
     </div>
   </div>
 
-  <div class="inputs-wrap">
+  <!-- Секция с инпутами для текста и кнопками -->
+  <div class="inputs-wrap" id="inputsWrap" style="display: none;">
+    <button id="backButton">← Назад</button>
     <input type="text" id="topText" placeholder="Верхний текст">
     <input type="text" id="bottomText" placeholder="Нижний текст">
   </div>
 
-  <button class="pulse-button" onclick="generateMeme()">Создать мем</button>
+  <button class="pulse-button" id="generateButton" onclick="generateMeme()" style="display: none;">Создать мем</button>
 
-  <div class="canvas-container">
+  <!-- Секция для отображения выбранного шаблона -->
+  <div class="canvas-container" id="canvasContainer" style="display: none;">
     <canvas id="memeCanvas"></canvas>
     <div id="placeholder" class="placeholder-overlay">
       <div class="icon">📷</div>
@@ -51,6 +55,7 @@
     </div>
   </div>
 
+  <!-- Кнопка отправки -->
   <button id="sendMemeBtn" style="display: none;">
     <span id="buttonText">Отправить мем в чат</span>
     <div id="loader" style="display: none;" class="loader"></div>
