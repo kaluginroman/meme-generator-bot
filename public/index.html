@@ -301,7 +301,7 @@
 
       async function ultraCompress(canvas) {
         const tempCanvas = document.createElement('canvas');
-        const maxWidth = 200;
+        const maxWidth = 500;
         const scale = maxWidth / canvas.width;
         tempCanvas.width = maxWidth;
         tempCanvas.height = canvas.height * scale;
@@ -311,7 +311,7 @@
         ctx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
 
         return new Promise(resolve => {
-          tempCanvas.toBlob(resolve, 'image/webp', 0.3);
+          tempCanvas.toBlob(resolve, 'image/webp', 0.7);
         });
       }
 
