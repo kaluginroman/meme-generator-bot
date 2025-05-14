@@ -323,8 +323,6 @@
           const blob = await ultraCompress(canvas);
           console.log(`Compressed blob size: ${blob.size}`);
 
-          if (blob.size > 3000) throw new Error(`Слишком много текста. Упростите мем. ${blob.size} байт`);
-
           const base64 = await new Promise(resolve => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
