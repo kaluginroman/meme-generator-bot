@@ -4,5 +4,10 @@
     "express": "^5.1.0",
     "multer": "^1.4.5-lts.2",
     "node-telegram-bot-api": "^0.66.0"
+  },
+  "scripts": {
+    "start": "node serve.js",
+    "dev": "node serve.js",
+    "deploy:vercel": "vercel deploy --prod"
   }
 }
