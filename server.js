@@ -62,12 +62,12 @@ app.post('/create-crypto-invoice', async (req, res) => {
       'https://pay.crypt.bot/api/createInvoice',
       {
         asset: 'TON',
-        amount: 1, // 5 TON, можно изменить
+        amount: 1,
         description: 'Оплата премиум подписки',
         hidden_message: 'Спасибо за оплату!',
         payload: telegram_id.toString(),
-        paid_btn_name: 'url',
-        paid_btn_url: 'https://t.me/BigMemeEnergyBot', // при необходимости замени
+        paid_btn_name: 'openBot',
+        paid_btn_url: 'https://t.me/BigMemeEnergyBot',
       },
       {
         headers: {
