@@ -61,7 +61,7 @@ app.post('/create-crypto-invoice', async (req, res) => {
       'https://pay.crypt.bot/createInvoice',
       {
         asset: 'TON',
-        amount: 5, // 5 TON, можно изменить
+        amount: 1, // 5 TON, можно изменить
         description: 'Оплата премиум подписки',
         hidden_message: 'Спасибо за оплату!',
         payload: telegram_id.toString(),
