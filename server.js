@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios'); // Подключаем axios для запросов
+const { execSync } = require('child_process');
 
 const token = '8180715464:AAGjcbhKQ-rdpGyB_Uv5_YRctduASPzx8yo';
 const CRYPTO_BOT_TOKEN = '419912:AA6EPR86K0sN4MztZ3UUaAI9fjNZaYTsLEF';
@@ -126,5 +127,12 @@ app.post('/crypto-webhook', async (req, res) => {
 });
 
 app.listen(PORT, () => {
+  try {
+    const commit = execSync('git log -1 --pretty=format:"%h - %s"').toString();
+    console.log(`Последний коммит: ${commit}`);
+  } catch (e) {
+    console.log('Не удалось получить информацию о последнем коммите');
+  }
+
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
 });
