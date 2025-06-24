@@ -54,13 +54,13 @@ app.post('/api/upload', async (req, res) => {
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const webAppUrl = 'https://meme-generator-inky-one.vercel.app/';
-  const paymentUrl = 'https://yoomoney.ru/quickpay/confirm.xml?receiver=4100119180836389&quickpay-form=shop&targets=Оплата+услуг&sum=500&paymentType=AC';
+  const paymentUrl = 'https://yoomoney.ru/quickpay/confirm.xml?receiver=4100119180836389&quickpay-form=shop&targets=Оплата+услуг&sum=100&paymentType=AC';
 
   bot.sendMessage(chatId, 'Добро пожаловать! Вы можете создать мем или купить премиум подписку:', {
     reply_markup: {
       inline_keyboard: [
         [{ text: 'Открыть генератор', web_app: { url: webAppUrl } }],
-        [{ text: 'Оплатить 500₽', url: paymentUrl }]
+        [{ text: 'Оплатить 100₽', url: paymentUrl }]
       ]
     }
   });
