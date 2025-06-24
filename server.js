@@ -3,8 +3,10 @@ const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const axios = require('axios'); // Подключаем axios для запросов
 
 const token = '8180715464:AAGjcbhKQ-rdpGyB_Uv5_YRctduASPzx8yo';
+const CRYPTO_BOT_TOKEN = '419912:AA6EPR86K0sN4MztZ3UUaAI9fjNZaYTsLEF';
 const ADMIN_CHAT_ID = '484715378';
 const PORT = process.env.PORT || 3000;
 const APP_URL = 'https://meme-generator-bot.onrender.com';
@@ -50,20 +52,77 @@ app.post('/api/upload', async (req, res) => {
   }
 });
 
-// 📥 Команда /start
-bot.onText(/\/start/, (msg) => {
+// ✅ Создание CryptoBot счёта
+app.post('/create-crypto-invoice', async (req, res) => {
+  const { telegram_id } = req.body;
+
+  try {
+    const invoiceRes = await axios.post(
+      'https://pay.crypt.bot/createInvoice',
+      {
+        asset: 'TON',
+        amount: 5, // 5 TON, можно изменить
+        description: 'Оплата премиум подписки',
+        hidden_message: 'Спасибо за оплату!',
+        payload: telegram_id.toString(),
+        paid_btn_name: 'url',
+        paid_btn_url: 'https://t.me/BigMemeEnergyBot', // при необходимости замени
+      },
+      {
+        headers: {
+          'Crypto-Pay-API-Token': CRYPTO_BOT_TOKEN,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const url = invoiceRes.data.result.pay_url;
+    res.json({ url });
+  } catch (err) {
+    console.error('❌ Ошибка создания CryptoBot счёта:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Ошибка создания счёта' });
+  }
+});
+
+// 📥 Команда /start — с кнопкой CryptoBot
+bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   const webAppUrl = 'https://meme-generator-inky-one.vercel.app/';
-  const paymentUrl = 'https://yoomoney.ru/quickpay/confirm.xml?receiver=4100119180836389&quickpay-form=shop&targets=Оплата+услуг&sum=100&paymentType=AC';
 
-  bot.sendMessage(chatId, 'Добро пожаловать! Вы можете создать мем или купить премиум подписку:', {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: 'Открыть генератор', web_app: { url: webAppUrl } }],
-        [{ text: 'Оплатить 100₽', url: paymentUrl }]
-      ]
-    }
-  });
+  try {
+    const invoice = await axios.post(
+      `${APP_URL}/create-crypto-invoice`,
+      { telegram_id: chatId },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    const payUrl = invoice.data.url;
+
+    bot.sendMessage(chatId, 'Добро пожаловать! Вы можете создать мем или купить премиум подписку:', {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: 'Открыть генератор', web_app: { url: webAppUrl } }],
+          [{ text: 'Оплатить 5 TON', url: payUrl }]
+        ]
+      }
+    });
+  } catch (error) {
+    console.error('Ошибка получения ссылки оплаты:', error.message);
+    bot.sendMessage(chatId, 'Ошибка при создании ссылки для оплаты. Попробуйте позже.');
+  }
+});
+
+// 🌐 Webhook от CryptoBot (оплата)
+app.post('/crypto-webhook', async (req, res) => {
+  const update = req.body;
+
+  if (update.event === 'invoice_paid') {
+    const telegramId = update.payload;
+
+    await bot.sendMessage(telegramId, '✅ Платёж в TON успешно получен! Спасибо за поддержку 🙌');
+  }
+
+  res.sendStatus(200);
 });
 
 app.listen(PORT, () => {
