@@ -58,7 +58,7 @@ app.post('/create-crypto-invoice', async (req, res) => {
 
   try {
     const invoiceRes = await axios.post(
-      'https://pay.crypt.bot/createInvoice',
+      'https://pay.crypt.bot/api/createInvoice',
       {
         asset: 'TON',
         amount: 1, // 5 TON, можно изменить
