@@ -61,7 +61,7 @@ app.post('/create-crypto-invoice', async (req, res) => {
     const invoiceRes = await axios.post(
       'https://pay.crypt.bot/api/createInvoice',
       {
-        asset: 'TON',
+        asset: 'USDT',
         amount: 1,
         description: 'Оплата премиум подписки',
         hidden_message: 'Спасибо за оплату!',
@@ -103,7 +103,7 @@ bot.onText(/\/start/, async (msg) => {
       reply_markup: {
         inline_keyboard: [
           [{ text: 'Открыть генератор', web_app: { url: webAppUrl } }],
-          [{ text: 'Оплатить 5 TON', url: payUrl }]
+          [{ text: 'Оплатить 1 USDT', url: payUrl }]
         ]
       }
     });
